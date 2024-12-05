@@ -37,7 +37,7 @@ jobs:
           body: |
             Automated release for version ${{ github.ref_name }}.
           files: |
-          dist/*  # Adjust to the path of your built files, if applicable
+          dist/* 
   
 
       - name: Build
