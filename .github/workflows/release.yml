@@ -29,6 +29,9 @@ jobs:
       - name: Test
         run: yarn test
 
+      - name: Build
+        run: yarn build
+
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
@@ -37,11 +40,4 @@ jobs:
           body: |
             Automated release for version ${{ github.ref_name }}.
           files: |
-          dist/* 
-  
-
-      - name: Build
-        run: yarn build
-
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            dist/*
