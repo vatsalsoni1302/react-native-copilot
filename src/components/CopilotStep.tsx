@@ -10,7 +10,7 @@ interface Props {
   text: string;
   children: React.ReactElement<any>;
   active?: boolean;
-  borderRadius?:number
+  borderRadius?: number;
 }
 
 export const CopilotStep = ({
@@ -19,27 +19,26 @@ export const CopilotStep = ({
   text,
   children,
   active = true,
-  borderRadius = 0
+  borderRadius = 0,
 }: Props) => {
-
-  
   const registeredName = useRef<string | null>(null);
-  const { registerStep, unregisterStep, currentStep,totalStepsNumber } = useCopilot();
+  const { registerStep, unregisterStep, currentStep, totalStepsNumber } =
+    useCopilot();
 
-  if(currentStep?.order + 1 > totalStepsNumber){
-    Const.radiusBorder = {}
+  if ((currentStep?.order ?? 0) + 1 > totalStepsNumber) {
+    Const.radiusBorder = {};
   }
- 
-  let radiusBordersForEachStep = {}
+
+  let radiusBordersForEachStep = {};
   radiusBordersForEachStep = {
-    [order]:borderRadius
-  }
-  
-  Const.radiusBorder =  {
+    [order]: borderRadius,
+  };
+
+  Const.radiusBorder = {
     ...Const.radiusBorder,
-    ...radiusBordersForEachStep
-  }
-  Const.activeCoPilotStep = currentStep?.order || 1
+    ...radiusBordersForEachStep,
+  };
+  Const.activeCoPilotStep = currentStep?.order ?? 1;
   const wrapperRef = React.useRef<NativeMethods | null>(null);
 
   const measure = async () => {
@@ -101,7 +100,7 @@ export const CopilotStep = ({
       ref: wrapperRef,
       onLayout: () => {}, // Android hack
     }),
-    []
+    [],
   );
 
   return React.cloneElement(children, { copilot: copilotProps });

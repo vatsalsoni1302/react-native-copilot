@@ -9,7 +9,6 @@ import {
 import Svg, { Path } from "react-native-svg";
 
 import type { MaskProps, SvgMaskPathFunction, ValueXY } from "../types";
-import { useCopilot } from "../index";
 import Const from "../Const";
 
 const AnimatedSvgPath = Animated.createAnimatedComponent(Path);
@@ -20,7 +19,8 @@ const defaultSvgPath: SvgMaskPathFunction = ({
   position,
   canvasSize,
 }): string => {
-  const cornerRadius = Number(Const.radiusBorder[Const.activeCoPilotStep]) || 0;
+  const cornerRadius =
+    Number((Const.radiusBorder as any)[Const.activeCoPilotStep]) || 0;
   const positionX = (position.x as any)._value as number;
   const positionY = (position.y as any)._value as number;
   const sizeX = (size.x as any)._value as number;
@@ -41,14 +41,14 @@ export const SvgMask = ({
   currentStep,
 }: MaskProps) => {
   const [canvasSize, setCanvasSize] = useState<ValueXY>({
-    x: (windowDimensions.width - 100),
-    y: (windowDimensions.height - 100),
+    x: windowDimensions.width - 100,
+    y: windowDimensions.height - 100,
   });
   const sizeValue = useRef<Animated.ValueXY>(
-    new Animated.ValueXY(size)
+    new Animated.ValueXY(size),
   ).current;
   const positionValue = useRef<Animated.ValueXY>(
-    new Animated.ValueXY(position)
+    new Animated.ValueXY(position),
   ).current;
   const maskRef = useRef<any>(null);
 
@@ -57,7 +57,7 @@ export const SvgMask = ({
       size: sizeValue,
       position: positionValue,
       canvasSize,
-      step: currentStep
+      step: currentStep,
     });
 
     if (maskRef.current) {
@@ -95,7 +95,7 @@ export const SvgMask = ({
       position,
       size,
       sizeValue,
-    ]
+    ],
   );
 
   useEffect(() => {
@@ -139,7 +139,7 @@ export const SvgMask = ({
               size: sizeValue,
               position: positionValue,
               canvasSize,
-              step: currentStep
+              step: currentStep,
             })}
           />
         </Svg>

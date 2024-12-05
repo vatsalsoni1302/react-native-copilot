@@ -32,7 +32,7 @@ interface CopilotContextType {
   currentStep: Step | undefined;
   start: (
     fromStep?: string,
-    suppliedScrollView?: ScrollView | null
+    suppliedScrollView?: ScrollView | null,
   ) => Promise<void>;
   stop: () => Promise<void>;
   goToNext: () => Promise<void>;
@@ -65,7 +65,7 @@ export const CopilotProvider = ({
 
   const [visible, setVisibility] = useStateWithAwait(false);
   const [scrollView, setScrollView] = useState<ScrollView | null>(null);
-  const firstStepRef = useRef<any>(null)
+  const firstStepRef = useRef<any>(null);
 
   const {
     currentStep,
@@ -80,13 +80,12 @@ export const CopilotProvider = ({
     setCurrentStepState,
     steps,
     registerStep,
-    unregisterStep
+    unregisterStep,
   } = useStepsMap();
 
-  useEffect(()=>{
-    firstStepRef.current = getFirstStep()
-  },[getFirstStep])
-
+  useEffect(() => {
+    firstStepRef.current = getFirstStep();
+  }, [getFirstStep]);
 
   const moveModalToStep = useCallback(
     async (step: Step) => {
@@ -103,7 +102,7 @@ export const CopilotProvider = ({
         y: size.y - OFFSET_WIDTH / 2 + verticalOffset,
       });
     },
-    [verticalOffset]
+    [verticalOffset],
   );
 
   const setCurrentStep = useCallback(
@@ -119,7 +118,7 @@ export const CopilotProvider = ({
             (_x, y, _w, h) => {
               const yOffset = y > 0 ? y - h / 2 : 0;
               scrollView.scrollTo({ y: yOffset, animated: false });
-            }
+            },
           );
         }
       }
@@ -130,10 +129,10 @@ export const CopilotProvider = ({
             void moveModalToStep(step);
           }
         },
-        scrollView != null ? 100 : 0
+        scrollView != null ? 100 : 0,
       );
     },
-    [copilotEvents, moveModalToStep, scrollView, setCurrentStepState]
+    [copilotEvents, moveModalToStep, scrollView, setCurrentStepState],
   );
 
   const start = useCallback(
@@ -142,7 +141,7 @@ export const CopilotProvider = ({
         setScrollView(suppliedScrollView);
       }
 
-      const currentStep = fromStep ? steps[fromStep] :firstStepRef.current;
+      const currentStep = fromStep ? steps[fromStep] : firstStepRef.current;
       if (startTries.current > MAX_START_TRIES) {
         startTries.current = 0;
         return;
@@ -162,19 +161,18 @@ export const CopilotProvider = ({
     },
     [
       copilotEvents,
-      getFirstStep,
       moveModalToStep,
       scrollView,
       setCurrentStep,
       setVisibility,
       steps,
-    ]
+    ],
   );
 
   const stop = useCallback(async () => {
     await setVisibility(false);
     copilotEvents.emit("stop");
-    setScrollView(null)
+    setScrollView(null);
   }, [copilotEvents, setVisibility]);
 
   const next = useCallback(async () => {
@@ -185,7 +183,7 @@ export const CopilotProvider = ({
     async (n: number) => {
       await setCurrentStep(getNthStep(n));
     },
-    [getNthStep, setCurrentStep]
+    [getNthStep, setCurrentStep],
   );
 
   const prev = useCallback(async () => {
@@ -208,9 +206,10 @@ export const CopilotProvider = ({
       isLastStep,
       currentStepNumber,
       totalStepsNumber,
-      getFirstStep
+      getFirstStep,
     }),
     [
+      getFirstStep,
       registerStep,
       unregisterStep,
       currentStep,
@@ -224,17 +223,14 @@ export const CopilotProvider = ({
       isFirstStep,
       isLastStep,
       currentStepNumber,
-      totalStepsNumber
-    ]
+      totalStepsNumber,
+    ],
   );
 
   return (
     <CopilotContext.Provider value={value}>
       <>
-        <CopilotModal
-          ref={modal}
-          {...rest}
-        />
+        <CopilotModal ref={modal} {...rest} />
         {children}
       </>
     </CopilotContext.Provider>
