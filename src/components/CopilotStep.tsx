@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef } from "react";
 import { type NativeMethods } from "react-native";
 
 import { useCopilot } from "../contexts/CopilotProvider";
+import Const from "../Const";
 
 interface Props {
   name: string;
@@ -9,6 +10,7 @@ interface Props {
   text: string;
   children: React.ReactElement<any>;
   active?: boolean;
+  borderRadius?:number
 }
 
 export const CopilotStep = ({
@@ -17,9 +19,27 @@ export const CopilotStep = ({
   text,
   children,
   active = true,
+  borderRadius = 0
 }: Props) => {
+
+  
   const registeredName = useRef<string | null>(null);
-  const { registerStep, unregisterStep } = useCopilot();
+  const { registerStep, unregisterStep, currentStep,totalStepsNumber } = useCopilot();
+
+  if(currentStep?.order + 1 > totalStepsNumber){
+    Const.radiusBorder = {}
+  }
+ 
+  let radiusBordersForEachStep = {}
+  radiusBordersForEachStep = {
+    [order]:borderRadius
+  }
+  
+  Const.radiusBorder =  {
+    ...Const.radiusBorder,
+    ...radiusBordersForEachStep
+  }
+  Const.activeCoPilotStep = currentStep?.order || 1
   const wrapperRef = React.useRef<NativeMethods | null>(null);
 
   const measure = async () => {
